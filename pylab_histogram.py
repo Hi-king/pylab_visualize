@@ -29,17 +29,14 @@ hikingko1@gmail.com
 
 parser.add_argument('input_csv', type=str)
 parser.add_argument('--column', type=int, default=1)
+parser.add_argument('--xlabel', type=str, default="")
+parser.add_argument('--ylabel', type=str, default="")
 parser.add_argument('--delimiter', type=str, choices=(",", "t", "n"), default=",")
 
 ##========##
 ## Import ##
 ##========##
 import pylab
-##=======##
-## Const ##
-##=======##
-CALCCHARAS = ['+', '-', '*', '/']
-eps = 0.001
 
 ##===========##
 ## Functions ##
@@ -51,6 +48,8 @@ def main(args):
     targetfile = args.input_csv
     targetcol = args.column
     delim  = args.delimiter
+    xlabel = args.xlabel
+    ylabel = args.ylabel
     if   delim=="t": delim = "\t"
     elif delim=="n": delim = "\n" 
     
@@ -67,6 +66,8 @@ def main(args):
     ##======##
     ## show ##
     ##======##
+    pylab.xlabel(unicode(xlabel, sys.stdin.encoding))
+    pylab.ylabel(unicode(ylabel, sys.stdin.encoding))
     pylab.bar(range(len(plots)), plots)
     pylab.show()
     
