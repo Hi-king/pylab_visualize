@@ -27,6 +27,7 @@ hikingko1@gmail.com
 
 parser.add_argument('columns', type=int, nargs="+")
 parser.add_argument('--delimiter', type=str, choices=(",", "t", "n"), default="t")
+parser.add_argument('--sumcolumn', type=int)
 
 ##======##
 ## main ##
@@ -49,16 +50,12 @@ def main(args):
     data = {}
     for line in sys.stdin:
         key = line2key(line, delim, columns)
-        data[key] = data[key]+1 if data.get(key) else 1
+        count = int(line.rstrip().split(delim)[args.sumcolumn]) if args.sumcolumn else 1
+        data[key] = data[key]+count if data.get(key) else count
     #print data
     
     for key,value in data.items():
-        print(key+delim+str(value))
-    
-
-    
-
-
+        print(key+delim+str(value))    
 if __name__ == '__main__':
     args = parser.parse_args()
     main(args)
