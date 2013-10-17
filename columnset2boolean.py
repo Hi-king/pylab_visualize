@@ -28,6 +28,7 @@ hikingko1@gmail.com
 
 parser.add_argument('columns', type=int, nargs="+")
 parser.add_argument('--delimiter', type=str, choices=(",", "t", "n"), default="t")
+parser.add_argument('--schema', type=str)
 
 ##======##
 ## main ##
@@ -57,12 +58,16 @@ def main(args):
     ## output
     ##=============
     ## schema
+    if args.schema : 
+        schemaline = open(args.schema).readline().rstrip().split(delim)
+    else:
+        schemaline = ["" for item in inputlines[0]]        
     thisline = []
-    for column,value in enumerate(line):
+    for column,value in enumerate(schemaline):
         if column in columns:
             thisline += itemdict[column]
         else:
-            thisline.append("")
+            thisline.append(value)
     thisline = ["%d: %s"%(column, value) for column, value in enumerate(thisline)]
     print reduce(lambda x,y: str(x)+delim+str(y), thisline)
     
