@@ -28,6 +28,7 @@ hikingko1@gmail.com
 parser.add_argument('columns', type=int, nargs="+")
 parser.add_argument('--delimiter', type=str, choices=(",", "t", "n"), default="t")
 parser.add_argument('--sumcolumn', type=int)
+parser.add_argument('--schemafile', type=str)
 
 ##======##
 ## main ##
@@ -47,13 +48,17 @@ def main(args):
     if   delim=="t": delim = "\t"
     elif delim=="n": delim = "\n" 
 
+    ## schema
+    if args.schemafile:
+        schemaline = open(args.schemafile).readline().rstrip().split(delim)
+        print(delim.join([schemaline[i] for i in args.columns]+["count"]))
+
+    ## datalines
     data = {}
     for line in sys.stdin:
         key = line2key(line, delim, columns)
-        count = int(line.rstrip().split(delim)[args.sumcolumn]) if args.sumcolumn else 1
+        count = float(line.rstrip().split(delim)[args.sumcolumn]) if args.sumcolumn else 1
         data[key] = data[key]+count if data.get(key) else count
-    #print data
-    
     for key,value in data.items():
         print(key+delim+str(value))    
 if __name__ == '__main__':
